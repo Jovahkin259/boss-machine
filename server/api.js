@@ -1,6 +1,9 @@
-const express = require('express');
-const apiRouter = express.Router();
+const express = require('express')
+const apiRouter = express.Router()
 
+// minions router
 
+// ideas router
 
-module.exports = apiRouter;
+// meetings router
+module.exports = apiRouter
