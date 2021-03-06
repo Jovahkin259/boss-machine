@@ -6,7 +6,8 @@
         "node": true
     },
     "extends": [
-        "standard"
+        "standard",
+        "plugin:mocha/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 12
