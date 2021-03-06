@@ -8,7 +8,5 @@ minionsRouter.get('/', (req, res, next) => {
 })
 
 // Create a new minion
-minionsRouter.post('/', (req, res, next) => {
-  const newMinion = req.body
-})
+
 module.exports = minionsRouter
