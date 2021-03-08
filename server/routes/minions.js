@@ -2,22 +2,34 @@ const db = require('../db')
 const express = require('express')
 const minionsRouter = express.Router()
 
-// Get all minions
-minionsRouter.get('/', (req, res, next) => {
-  res.send(db.getAllFromDatabase('minions'))
-})
-
-const validateMinion = (req, res, next) => {
-  const newMinion = req.body
-  if (typeof newMinion.name !== 'string' || typeof newMinion.title !== 'string' ||
-        typeof newMinion.salary !== 'number') {
-    res.status(400).send()
+// Match parameters to
+minionsRouter.param('minionId', (req, res, next, id) => {
+  const minionId = db.getFromDatabaseById('minions', req.params.minionId)
+  if (!minionId) {
+    res.status(404).send()
   } else {
-    req.newMinion = newMinion
+    req.minionId = minionId
     next()
   }
-}
+})
+
+// Get all minions
+minionsRouter.get('/', (req, res, next) => {
+  try {
+    res.send(db.getAllFromDatabase('minions'))
+  } catch (err) {
+    res.status(404).send(err.message)
+  }
+})
+
+// Get a minion by id
+minionsRouter.get('/:minionId', (req, res, next) => {
+  res.send(req.minionId)
+})
+
+// Update a minion
 
 // Create a new minion
-minionsRouter.post('/', validateMinion, (req, res, next) => {})
+
+//  Delete a minion
 module.exports = minionsRouter
