@@ -76,7 +76,6 @@ minionsRouter.get('/:minionId/work', (req, res, next) => {
   })
   res.send(work)
 })
-
 // Create work for a specific minion
 minionsRouter.post('/:minionId/work', (req, res, next) => {
   const workToAdd = req.body
@@ -86,35 +85,4 @@ minionsRouter.post('/:minionId/work', (req, res, next) => {
   res.status(201).send(createdWork)
 })
 
-// Route parameters for workId
-minionsRouter.param('workId', (req, res, next, id) => {
-  const work = db.getFromDatabaseById('work', id)
-  if (work) {
-    req.work = work
-    next()
-  } else {
-    res.status(404).send()
-  }
-})
-
-// Update specified work for a minion
-minionsRouter.put('/:minionId/work/:workId', (req, res, next) => {
-  if (req.params.minionId !== req.body.minionId) {
-    res.status(400).send()
-  } else {
-    const updatedWork = db.updateInstanceInDatabase('work', req.body)
-    res.send(updatedWork)
-  }
-})
-
-// Delete work for a specific minion
-minionsRouter.delete('/:minionId/work/:workId', (req, res, next) => {
-  const deleted = db.deleteFromDatabasebyId('work', req.params.workId)
-  if (deleted) {
-    res.status(204)
-  } else {
-    res.status(500)
-  }
-  res.send()
-})
 module.exports = minionsRouter
