@@ -16,7 +16,9 @@ minionsRouter.param('minionId', (req, res, next, minionId) => {
 // Validate minions
 const validateMinion = (req, res, next) => {
   const validMinion = req.body
-  if (typeof validMinion.name === 'string' && typeof validMinion.title === 'string' && typeof validMinion.salary === 'number') {
+  if (typeof validMinion.name === 'string' &&
+      typeof validMinion.title === 'string' &&
+      typeof validMinion.salary === 'number') {
     next()
   } else {
     res.status(400).send()
@@ -65,5 +67,54 @@ minionsRouter.delete('/:minionId', (req, res, next) => {
   } else {
     res.status(204).send()
   }
+})
+
+// Get array of work for specified minions
+minionsRouter.get('/:minionId/work', (req, res, next) => {
+  const work = db.getAllFromDatabase('work').filter((singleWork) => {
+    return singleWork.minionId === req.params.minionId
+  })
+  res.send(work)
+})
+
+// Create work for a specific minion
+minionsRouter.post('/:minionId/work', (req, res, next) => {
+  const workToAdd = req.body
+  workToAdd.minionId = req.params.minionId
+
+  const createdWork = db.addToDatabase('work', workToAdd)
+  res.status(201).send(createdWork)
+})
+
+// Route parameters for workId
+minionsRouter.param('workId', (req, res, next, id) => {
+  const work = db.getFromDatabaseById('work', id)
+  if (work) {
+    req.work = work
+    next()
+  } else {
+    res.status(404).send()
+  }
+})
+
+// Update specified work for a minion
+minionsRouter.put('/:minionId/work/:workId', (req, res, next) => {
+  if (req.params.minionId !== req.body.minionId) {
+    res.status(400).send()
+  } else {
+    const updatedWork = db.updateInstanceInDatabase('work', req.body)
+    res.send(updatedWork)
+  }
+})
+
+// Delete work for a specific minion
+minionsRouter.delete('/:minionId/work/:workId', (req, res, next) => {
+  const deleted = db.deleteFromDatabasebyId('work', req.params.workId)
+  if (deleted) {
+    res.status(204)
+  } else {
+    res.status(500)
+  }
+  res.send()
 })
 module.exports = minionsRouter
