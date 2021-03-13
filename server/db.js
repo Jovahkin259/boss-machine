@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-negation */
 const faker = require('faker')
 
 let minionIdCounter = 1

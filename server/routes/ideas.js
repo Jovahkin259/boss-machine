@@ -1,6 +1,7 @@
 const express = require('express')
 const ideasRouter = express.Router()
 const db = require('../db')
+const checkMillionDollarIdea = require('../checkMillionDollarIdea')
 
 // Check matching id parameters
 ideasRouter.param('ideaId', (req, res, next, ideaId) => {
@@ -40,7 +41,7 @@ ideasRouter.put('/:ideaId', (req, res, next) => {
 })
 
 // Create a new idea
-ideasRouter.post('/', (req, res, next) => {
+ideasRouter.post('/', checkMillionDollarIdea, (req, res, next) => {
   const newIdea = db.addToDatabase('ideas', req.body)
   if (!newIdea) {
     res.status(400).send()
