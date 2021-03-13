@@ -84,5 +84,15 @@ minionsRouter.post('/:minionId/work', (req, res, next) => {
   const createdWork = db.addToDatabase('work', workToAdd)
   res.status(201).send(createdWork)
 })
+// Route parameters for workId
+minionsRouter.param('workId', (req, res, next, id) => {
+  const work = db.getFromDatabaseById('work', id)
+  if (work) {
+    req.work = work
+    next()
+  } else {
+    res.status(404).send()
+  }
+})
 
 module.exports = minionsRouter
